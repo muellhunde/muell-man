@@ -1128,7 +1128,13 @@ class GameCoordinator {
     this.pausedText = document.getElementById('paused-text');
     this.bottomRow = document.getElementById('bottom-row');
     this.movementButtons = document.getElementById('movement-buttons');
+    this.nicknameDisplay = document.getElementById('nick-name');
+    this.nicknameInput = document.getElementById('nick-name-input');
+    this.nickname = "";
+    this.weltrangliste = document.getElementById('weltrangliste');
 
+    document.getElementById('nick-name-input').style.display = 'none';
+    document.getElementById('choosewisely').style.display = 'none';
     this.mazeArray = [
       ['XXXXXXXXXXXXXXXXXXXXXXXXXXXX'],
       ['XooooooooooooXXooooooooooooX'],
@@ -1184,19 +1190,47 @@ class GameCoordinator {
     };
 
     this.fruitPoints = {
-      1: 100,
-      2: 300,
-      3: 500,
+      1: 300,
+      2: 420,
+      3: 422,
       4: 700,
-      5: 1000,
-      6: 2000,
-      7: 3000,
-      8: 5000,
+      5: 1312,
+      6: 1860,
+      7: 3210,
+      8: 4222,
     };
 
     this.mazeArray.forEach((row, rowIndex) => {
       this.mazeArray[rowIndex] = row[0].split('');
     });
+
+    // Create a request variable and assign a new XMLHttpRequest object to it.
+    var request = new XMLHttpRequest()
+
+    // Open a new connection, using the GET request on the URL endpoint
+    request.open('GET', 'https://next-muell.vercel.app/api/highscores', true)
+
+    request.onload = function (response) {
+      // Begin accessing JSON data here
+      try {
+        const hsList = JSON.parse(this.response);
+        const wrl = document.getElementById('weltrangliste');
+        wrl.innerHTML = "";
+        for(var i=0;i<10;i++) {
+          const el = hsList[i];
+          const li = '<li>' + el.name  + ' <span> ( '+ el.score+' )</span>'+'</li>'
+          wrl.innerHTML += li;
+        }
+      }
+      catch(e) {
+
+      }
+
+    }
+
+    // Send request
+    request.send()
+
 
     this.gameStartButton.addEventListener(
       'click',
@@ -1217,6 +1251,7 @@ class GameCoordinator {
 
     head.appendChild(link);
   }
+
 
   /**
    * Recursive method which determines the largest possible scale the game's graphics can use
@@ -1256,7 +1291,11 @@ class GameCoordinator {
     this.leftCover.style.left = '-50%';
     this.rightCover.style.right = '-50%';
     this.mainMenu.style.opacity = 0;
-    this.gameStartButton.disabled = true;
+    this.gameStartButton.disabled = true;    
+
+    this.nickname = this.nicknameInput.value
+    localStorage.setItem('nickname', this.nickname);
+    this.nicknameDisplay.innerText = this.nickname;
 
     setTimeout(() => {
       this.mainMenu.style.visibility = 'hidden';
@@ -1905,7 +1944,8 @@ class GameCoordinator {
     if (this.points > (this.highScore || 0)) {
       this.highScore = this.points;
       this.highScoreDisplay.innerText = this.points;
-      localStorage.setItem('highScore', this.highScore);
+      localStorage.setItem('highScore', this.highScore);      
+
     }
 
     if (this.points >= 10000 && !this.extraLifeGiven) {
@@ -1990,6 +2030,40 @@ class GameCoordinator {
    */
   gameOver() {
     localStorage.setItem('highScore', this.highScore);
+    console.log("POST highscorem ", this.highScore);
+    const nickname = document.getElementById('nick-name').innerText;
+    if(nickname && nickname.length>0) {
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", 'https://next-muell.vercel.app/api/highscores', true);
+  
+        //Send the proper header information along with the request
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+  
+        xhr.onreadystatechange = () => { // Call a function when the state changes.
+          if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            // Request finished. Do processing here.
+            try {
+              const hsList = JSON.parse(this.response);
+              const wrl = document.getElementById('weltrangliste');
+              wrl.innerHTML = "";
+              for(var i=0;i<10;i++) {
+                const el = hsList[i];
+                const li = '<li>' + el.name  + '<span> ( '+ el.score+' )</span>'+'</li>'
+                wrl.innerHTML += li;
+              }
+            }
+            catch(e) {
+      
+            }
+          }
+        }
+        xhr.send("name="+nickname+"&score="+this.highScore);
+      }
+      catch(exc) {
+        console.log("exception while posting highscore", exc);
+      }
+    }
 
     new Timer(() => {
       this.displayText(

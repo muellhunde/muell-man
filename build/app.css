@@ -141,8 +141,22 @@ body {
 .logo {
   height: 200px;
   margin-top: 25vh; }
-
+.nick-name {
+  font-size: 48px;
+  outline: none;
+  padding: 16px;
+  font-size: 34px;
+  color: #231f20;
+  margin-top: 30px;
+}
+.weltrangliste {
+  font-size: 22px;
+  padding-top:50px;
+  color: #231f20;
+  width: 80vw;
+}
 .game-start {
+  margin-top: 30px;
   background-color: #fcc73f;
   border: 5px solid #231f20;
   border-radius: 10px;
@@ -381,3 +395,26 @@ body {
     opacity: 0; }
   50% {
     opacity: 1; } }
+
+
+
+
+.retro-input {
+  outline: none;  
+  margin: 15px;
+  padding: 7px 0 7px 14px;
+  border: 3px solid rgb(150, 150, 150);
+  box-shadow: 0px 0px 0px 1px #ee2a29,
+    inset 0px 0px 0px 1px #ee2a29,
+    1px 2px 0px 2px rgb(5, 203, 31);
+  border-radius: 0.3em;
+  color: #ee2a29;
+  font-weight: 700;
+  font-size: 1.3em;
+}
+.retro-input:focus {
+  box-shadow: 0px 0px 0px 1px #ee2a29,
+    inset 0px 0px 0px 1px #ee2a29,
+    1px 2px 0px 1px rgb(5, 203, 31);
+}
+        

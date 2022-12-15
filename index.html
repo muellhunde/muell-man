@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html>
   <head>
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -31,21 +31,34 @@
         <button id='game-start' class='game-start'>
           WUFF
         </button>
+        
+        <input id="nick-name-input" class="retro-input" type="text" placeholder="Max Muellman" />
+        <span id="choosewisely">enter a nickname to be ranked on the weltrangliste (can't be changed)</span>
+        <span class="nick-name" style="display: none;">lelel</span>
+        <span id="nick-name-start" class="nick-name" style="display: none;">lelel</span>
+        <div class="weltrangliste">
+          muell-man weltrangliste:
+          <br>
+          get high & get the high score !
+          <ol id="weltrangliste">
+          </ol>
+        </div>
       </div>
 
       <div class='header-buttons'>
         <button>
           <i id='pause-button' class='material-icons'>
-            pause
+            wau
           </i>
         </button>
         <button>
           <i id='sound-button' class='material-icons'></i>
         </button>
+        <span id="nick-name"></span>
       </div>
 
       <div id='paused-text' class='paused-text'>
-        PAUSED
+        powered by muellhun.de & <br> muelldogg.en productions
       </div>
 
       <div id='game-ui' class='game-ui'>
@@ -76,7 +89,9 @@
           <div id='extra-lives' class='extra-lives'></div>
           <div id='fruit-display' class='fruit-display'></div>
         </div>
-      </div>
+      </div>    
+      
+      
 
       <div id='movement-buttons' class='movement-buttons'>
         <div class='row'>
@@ -138,8 +153,18 @@
         </div>
       </div>
 
+
+
       <script>
         window.onload = () => {
+          let nickname = localStorage.getItem('nickname');
+          if(nickname && nickname.length>0) {
+            let el = document.getElementById('nick-name-start');
+            el.innerText = "player: " + nickname;
+            el.style.display = 'block';
+            document.getElementById('nick-name-input').style.display = 'none';
+            document.getElementById('choosewisely').style.display = 'none';
+          }
           let gameCoordinator = new GameCoordinator();
         }
       </script>
