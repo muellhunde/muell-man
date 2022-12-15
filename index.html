@@ -158,6 +158,7 @@
       <script>
         window.onload = () => {
           let nickname = localStorage.getItem('nickname');
+          console.log("player", nickname)
           if(nickname && nickname.length>0) {
             let el = document.getElementById('nick-name-start');
             el.innerText = "player: " + nickname;
